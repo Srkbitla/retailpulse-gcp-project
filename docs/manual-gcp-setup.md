@@ -85,7 +85,7 @@ Recommended settings:
 
 ## Step 6: Create base tables in BigQuery
 
-Open the BigQuery SQL editor and run [01_create_objects.sql](/C:/Users/Srinivas%20Porandla/OneDrive/Documents/New%20project/sql/01_create_objects.sql). Replace `your-gcp-project-id` with your actual project ID first.
+Open the BigQuery SQL editor and run [sql/01_create_objects.sql](../sql/01_create_objects.sql). Replace `your-gcp-project-id` with your actual project ID first.
 
 This creates:
 
@@ -102,7 +102,7 @@ Cloud Composer is useful for interview demos because it shows orchestration and 
 1. Go to `Cloud Composer` -> `Create environment`.
 2. Choose the latest supported Composer image in your region.
 3. Use the same region as the rest of the project when possible.
-4. After the environment is ready, upload [retailpulse_realtime_dag.py](/C:/Users/Srinivas%20Porandla/OneDrive/Documents/New%20project/orchestration/composer/retailpulse_realtime_dag.py) and the SQL files from [sql](/C:/Users/Srinivas%20Porandla/OneDrive/Documents/New%20project/sql).
+4. After the environment is ready, upload [orchestration/composer/retailpulse_realtime_dag.py](../orchestration/composer/retailpulse_realtime_dag.py) and the SQL files from [sql](../sql).
 5. Add Airflow variables:
    - `retailpulse_project_id`
    - `retailpulse_dataset_location`
@@ -121,7 +121,7 @@ pip install -r requirements.txt
 
 ## Step 9: Start the streaming pipeline
 
-Run the pipeline from [pipeline.py](/C:/Users/Srinivas%20Porandla/OneDrive/Documents/New%20project/src/streaming/pipeline.py):
+Run the pipeline from [src/streaming/pipeline.py](../src/streaming/pipeline.py):
 
 ```powershell
 python -m src.streaming.pipeline `
@@ -138,7 +138,7 @@ python -m src.streaming.pipeline `
 
 ## Step 10: Publish sample events
 
-Run the producer from [order_events_producer.py](/C:/Users/Srinivas%20Porandla/OneDrive/Documents/New%20project/src/producer/order_events_producer.py):
+Run the producer from [src/producer/order_events_producer.py](../src/producer/order_events_producer.py):
 
 ```powershell
 python -m src.producer.order_events_producer `
@@ -152,9 +152,9 @@ python -m src.producer.order_events_producer `
 
 After data starts landing in BigQuery:
 
-1. Run [02_silver_orders_curated.sql](/C:/Users/Srinivas%20Porandla/OneDrive/Documents/New%20project/sql/02_silver_orders_curated.sql)
-2. Run [03_gold_business_kpis.sql](/C:/Users/Srinivas%20Porandla/OneDrive/Documents/New%20project/sql/03_gold_business_kpis.sql)
-3. Run [04_data_quality_checks.sql](/C:/Users/Srinivas%20Porandla/OneDrive/Documents/New%20project/sql/04_data_quality_checks.sql)
+1. Run [sql/02_silver_orders_curated.sql](../sql/02_silver_orders_curated.sql)
+2. Run [sql/03_gold_business_kpis.sql](../sql/03_gold_business_kpis.sql)
+3. Run [sql/04_data_quality_checks.sql](../sql/04_data_quality_checks.sql)
 
 If Composer is configured, the DAG can run these steps automatically on schedule.
 

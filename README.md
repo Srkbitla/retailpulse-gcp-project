@@ -1,26 +1,31 @@
 # RetailPulse: Real-Time Order Analytics Platform on GCP
 
-RetailPulse is an interview-ready, end-to-end GCP Data Engineering project that simulates an online retail business streaming order lifecycle events in real time. It shows how to ingest, validate, process, warehouse, and operationalize streaming data using native GCP services and production-style design patterns.
+Portfolio project for `GCP Data Engineering`, `streaming ETL`, and `BigQuery` analytics.
 
-## Why this project works for interviews
+RetailPulse is an end-to-end real-time data platform that simulates e-commerce order lifecycle events, processes them with `Pub/Sub` and `Dataflow`, stores them in `BigQuery` using `bronze/silver/gold` modeling, and orchestrates downstream transformations with `Cloud Composer`.
 
-- Solves a realistic business problem: near real-time visibility into orders, revenue, payment success, and fulfilment SLAs.
-- Uses core GCP data engineering services that hiring teams expect: Pub/Sub, Dataflow, BigQuery, Cloud Storage, and Cloud Composer.
-- Demonstrates both streaming and warehouse modeling patterns: schema validation, deduplication, late-arriving data handling, bronze/silver/gold design, and data quality auditing.
-- Includes both automated `gcloud` setup and a manual GCP Console path so the project is easy to reproduce.
-- Gives you concrete material for resume bullets, architecture discussions, and follow-up interview questions.
+## Why This Repo Is Worth Reviewing
 
-## Business scenario
+- Demonstrates a complete streaming pipeline instead of only isolated scripts.
+- Uses core GCP data engineering services commonly expected in interviews.
+- Shows production-style patterns: schema validation, dead-letter handling, deduplication, data quality checks, partitioning, and clustering.
+- Connects technical design to business outcomes such as revenue visibility, payment tracking, and fulfilment SLA monitoring.
 
-An e-commerce company wants a streaming data platform that can:
+## Project Snapshot
 
-- ingest order events from multiple stores in real time,
-- power live operational dashboards,
-- track payment and shipment status across the order lifecycle,
-- expose curated BigQuery tables for analysts and BI dashboards,
-- capture invalid records for replay and troubleshooting.
+Business problem:
+An e-commerce company needs near real-time visibility into orders, payments, shipments, and fulfilment performance.
 
-## End-to-end architecture
+What the pipeline does:
+
+- ingests order events through `Pub/Sub`
+- validates and processes events in `Dataflow`
+- writes raw and operational outputs to `BigQuery`
+- builds `bronze`, `silver`, and `gold` analytical layers
+- schedules curated SQL transformations with `Cloud Composer`
+- captures bad records for replay through a dead-letter pattern
+
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -44,102 +49,47 @@ flowchart LR
     M --> F
 ```
 
-## GCP services and tooling
+## Tech Stack
 
-- Pub/Sub for event ingestion
-- Dataflow (Apache Beam) for streaming ETL
-- BigQuery for bronze, silver, gold, and operational metrics tables
-- Cloud Storage for dead-letter and Dataflow temp/staging buckets
-- Cloud Composer for scheduled warehouse transformations and data quality checks
-- gcloud CLI and PowerShell for automated setup
-- Looker Studio for dashboarding
+- `GCP`: Pub/Sub, Dataflow, BigQuery, Cloud Storage, Cloud Composer
+- `Languages`: Python, SQL, PowerShell
+- `Frameworks and Tools`: Apache Beam, Airflow, `gcloud` CLI
+- `Patterns`: streaming ETL, bronze/silver/gold modeling, dead-letter design, data quality auditing
 
-## Project structure
+## What This Project Demonstrates
 
-```text
-.
-|-- config/
-|   `-- pipeline_config.example.json
-|-- docs/
-|   |-- architecture.md
-|   |-- interview-guide.md
-|   |-- manual-gcp-setup.md
-|   `-- resume-kit.md
-|-- infra/
-|   `-- terraform/
-|       |-- main.tf
-|       |-- outputs.tf
-|       |-- terraform.tfvars.example
-|       |-- variables.tf
-|       |-- versions.tf
-|       `-- schemas/
-|           |-- data_quality_audit.json
-|           |-- raw_events.json
-|           `-- realtime_metrics.json
-|-- scripts/
-|   `-- gcloud/
-|       `-- setup_retailpulse.ps1
-|-- orchestration/
-|   `-- composer/
-|       `-- retailpulse_realtime_dag.py
-|-- sql/
-|   |-- 01_create_objects.sql
-|   |-- 02_silver_orders_curated.sql
-|   |-- 03_gold_business_kpis.sql
-|   `-- 04_data_quality_checks.sql
-|-- src/
-|   |-- __init__.py
-|   |-- producer/
-|   |   `-- order_events_producer.py
-|   `-- streaming/
-|       |-- __init__.py
-|       |-- pipeline.py
-|       |-- schemas.py
-|       `-- transforms.py
-|-- tests/
-|   `-- test_transforms.py
-`-- requirements.txt
-```
+- Real-time event ingestion and stream processing on GCP
+- BigQuery warehouse modeling for analytics and operational reporting
+- Window-based deduplication by `event_id`
+- Late-arriving data handling and bad record isolation
+- Cost-aware table design using partitioning and clustering
+- Orchestrated downstream SQL jobs for silver, gold, and DQ layers
 
-## Technical highlights you can speak about
+## Data Model
 
-- Streaming validation with a dead-letter pattern for malformed events
-- Windowed deduplication by `event_id` in Dataflow
-- Real-time operational metrics written directly from the streaming pipeline
-- BigQuery partitioning and clustering for cost and performance control
-- Bronze, silver, gold data modeling strategy
-- Composer-driven downstream SQL transformations and data quality checks
-- Repeatable environment setup with `gcloud` automation and a manual console guide
+| Layer | Table | Purpose |
+|---|---|---|
+| `bronze` | `retail_events` | validated event-level streaming data |
+| `ops` | `real_time_order_metrics` | one-minute operational dashboard metrics |
+| `silver` | `orders_curated` | order-level current-state analytics |
+| `gold` | `store_hourly_kpis` | store and region revenue/order KPIs |
+| `gold` | `region_fulfilment_sla` | fulfilment SLA and dispatch performance |
+| `ops` | `data_quality_audit` | warehouse quality check outcomes |
 
-## Data model
+## Business KPIs
 
-### Event types
+- orders per minute
+- gross revenue by store and region
+- average order value
+- payment capture rate
+- dispatch lag
+- on-time delivery percentage
 
-- `ORDER_CREATED`
-- `PAYMENT_CAPTURED`
-- `SHIPMENT_DISPATCHED`
-- `DELIVERY_COMPLETED`
+## Quick Start
 
-### Core tables
+### 1. Provision core resources
 
-- `bronze.retail_events`
-  Raw but validated streaming events from Pub/Sub
-- `ops.real_time_order_metrics`
-  One-minute window operational metrics for live dashboards
-- `silver.orders_curated`
-  Order-level current-state view with payment and shipment enrichment
-- `gold.store_hourly_kpis`
-  Store and region level revenue, order, and fulfilment KPIs
-- `gold.region_fulfilment_sla`
-  Region-level delivery SLA metrics
-- `ops.data_quality_audit`
-  Quality check outputs for observability and governance
-
-## How to run
-
-### 1. Provision core GCP resources
-
-Option A: run the PowerShell setup script
+Option A: automated setup
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\gcloud\setup_retailpulse.ps1 `
@@ -148,11 +98,13 @@ powershell -ExecutionPolicy Bypass -File .\scripts\gcloud\setup_retailpulse.ps1 
   -DatasetLocation US
 ```
 
-Option B: follow the manual console guide in [manual-gcp-setup.md](/C:/Users/Srinivas%20Porandla/OneDrive/Documents/New%20project/docs/manual-gcp-setup.md)
+Option B: manual setup
 
-### 2. Create or refresh BigQuery objects
+- Follow [docs/manual-gcp-setup.md](docs/manual-gcp-setup.md)
 
-Run the SQL files in order inside BigQuery. Start with `sql/01_create_objects.sql`.
+### 2. Create base tables
+
+- Run [sql/01_create_objects.sql](sql/01_create_objects.sql) after replacing `your-gcp-project-id`
 
 ### 3. Install dependencies
 
@@ -162,7 +114,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 4. Start the Dataflow streaming job
+### 4. Run the streaming pipeline
 
 ```powershell
 python -m src.streaming.pipeline `
@@ -177,7 +129,7 @@ python -m src.streaming.pipeline `
   --runner=DataflowRunner
 ```
 
-### 5. Publish simulated events
+### 5. Publish sample events
 
 ```powershell
 python -m src.producer.order_events_producer `
@@ -187,33 +139,32 @@ python -m src.producer.order_events_producer `
   --sleep_seconds=0.5
 ```
 
-### 6. Deploy the Composer DAG
+### 6. Build curated layers
 
-Copy `orchestration/composer/retailpulse_realtime_dag.py` and the `sql/` folder to your Composer DAG bucket. The DAG runs hourly to build silver and gold tables and write DQ audit results.
+- Run [sql/02_silver_orders_curated.sql](sql/02_silver_orders_curated.sql)
+- Run [sql/03_gold_business_kpis.sql](sql/03_gold_business_kpis.sql)
+- Run [sql/04_data_quality_checks.sql](sql/04_data_quality_checks.sql)
+- Or deploy [orchestration/composer/retailpulse_realtime_dag.py](orchestration/composer/retailpulse_realtime_dag.py)
 
-## Suggested dashboard metrics
+## Key Files
 
-- orders per minute
-- gross revenue by store and region
-- average order value
-- payment capture rate
-- shipment dispatch lag
-- on-time delivery percentage
+- Streaming pipeline: [src/streaming/pipeline.py](src/streaming/pipeline.py)
+- Transform logic: [src/streaming/transforms.py](src/streaming/transforms.py)
+- Event producer: [src/producer/order_events_producer.py](src/producer/order_events_producer.py)
+- Composer DAG: [orchestration/composer/retailpulse_realtime_dag.py](orchestration/composer/retailpulse_realtime_dag.py)
+- Architecture notes: [docs/architecture.md](docs/architecture.md)
+- Interview prep: [docs/interview-guide.md](docs/interview-guide.md)
+- Resume bullets: [docs/resume-kit.md](docs/resume-kit.md)
 
-## Resume and interview help
+## Interview Talking Points
 
-- Resume-ready bullets: `docs/resume-kit.md`
-- Architecture deep dive: `docs/architecture.md`
-- Manual setup walkthrough: `docs/manual-gcp-setup.md`
-- Mock interview talking points: `docs/interview-guide.md`
+- Why `Pub/Sub + Dataflow` is a strong fit for real-time order events
+- How dead-letter handling protects the main pipeline
+- Why `bronze/silver/gold` modeling makes analytics easier to scale
+- How partitioning and clustering reduce BigQuery cost
+- What you would improve for production, such as CI/CD, dbt, lineage, and monitoring
 
-## How to present this in an interview
+## Resume-Ready Summary
 
-Tell the story in this order:
+Built a real-time GCP data pipeline using `Pub/Sub`, `Dataflow`, `BigQuery`, `Cloud Composer`, and `Cloud Storage` to process order lifecycle events, model `bronze/silver/gold` analytics layers, and support near real-time operational KPIs and fulfilment reporting.
 
-1. Business problem and why real-time data matters.
-2. Event ingestion and streaming validation with Pub/Sub and Dataflow.
-3. BigQuery modeling from bronze to gold.
-4. Operational monitoring, replay strategy, and data quality checks.
-5. Cost and performance optimizations.
-6. Impact metrics from your demo run or benchmark.
