@@ -1,0 +1,48 @@
+[
+  {
+    "name": "window_start",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "window_end",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "store_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "region",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "total_orders",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "gross_revenue",
+    "type": "FLOAT",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "avg_order_value",
+    "type": "FLOAT",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "high_value_orders",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "pipeline_run_ts",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  }
+]
+

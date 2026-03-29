@@ -1,0 +1,46 @@
+RAW_EVENTS_SCHEMA = {
+    "fields": [
+        {"name": "event_id", "type": "STRING", "mode": "REQUIRED"},
+        {"name": "order_id", "type": "STRING", "mode": "REQUIRED"},
+        {"name": "customer_id", "type": "STRING", "mode": "NULLABLE"},
+        {"name": "event_type", "type": "STRING", "mode": "REQUIRED"},
+        {"name": "event_ts", "type": "TIMESTAMP", "mode": "REQUIRED"},
+        {"name": "event_date", "type": "DATE", "mode": "REQUIRED"},
+        {"name": "store_id", "type": "STRING", "mode": "REQUIRED"},
+        {"name": "region", "type": "STRING", "mode": "REQUIRED"},
+        {"name": "currency", "type": "STRING", "mode": "REQUIRED"},
+        {"name": "order_amount", "type": "FLOAT", "mode": "REQUIRED"},
+        {"name": "payment_status", "type": "STRING", "mode": "NULLABLE"},
+        {"name": "shipment_status", "type": "STRING", "mode": "NULLABLE"},
+        {"name": "ingest_source", "type": "STRING", "mode": "REQUIRED"},
+        {"name": "processing_ts", "type": "TIMESTAMP", "mode": "REQUIRED"},
+        {"name": "is_late_arrival", "type": "BOOLEAN", "mode": "REQUIRED"},
+        {
+            "name": "items",
+            "type": "RECORD",
+            "mode": "REPEATED",
+            "fields": [
+                {"name": "sku", "type": "STRING", "mode": "REQUIRED"},
+                {"name": "category", "type": "STRING", "mode": "REQUIRED"},
+                {"name": "qty", "type": "INTEGER", "mode": "REQUIRED"},
+                {"name": "unit_price", "type": "FLOAT", "mode": "REQUIRED"},
+                {"name": "line_amount", "type": "FLOAT", "mode": "REQUIRED"},
+            ],
+        },
+    ]
+}
+
+REALTIME_METRICS_SCHEMA = {
+    "fields": [
+        {"name": "window_start", "type": "TIMESTAMP", "mode": "REQUIRED"},
+        {"name": "window_end", "type": "TIMESTAMP", "mode": "REQUIRED"},
+        {"name": "store_id", "type": "STRING", "mode": "REQUIRED"},
+        {"name": "region", "type": "STRING", "mode": "REQUIRED"},
+        {"name": "total_orders", "type": "INTEGER", "mode": "REQUIRED"},
+        {"name": "gross_revenue", "type": "FLOAT", "mode": "REQUIRED"},
+        {"name": "avg_order_value", "type": "FLOAT", "mode": "REQUIRED"},
+        {"name": "high_value_orders", "type": "INTEGER", "mode": "REQUIRED"},
+        {"name": "pipeline_run_ts", "type": "TIMESTAMP", "mode": "REQUIRED"},
+    ]
+}
+

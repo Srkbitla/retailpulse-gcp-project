@@ -1,0 +1,12 @@
+{
+  "project_id": "your-gcp-project-id",
+  "region": "us-central1",
+  "input_subscription": "projects/your-gcp-project-id/subscriptions/retail-events-sub",
+  "raw_table": "your-gcp-project-id:bronze.retail_events",
+  "metrics_table": "your-gcp-project-id:ops.real_time_order_metrics",
+  "dead_letter_path": "gs://your-gcp-project-id-retailpulse-raw/dead-letter/retail-events",
+  "temp_location": "gs://your-gcp-project-id-retailpulse-temp/dataflow/temp",
+  "staging_location": "gs://your-gcp-project-id-retailpulse-temp/dataflow/staging",
+  "runner": "DataflowRunner"
+}
+

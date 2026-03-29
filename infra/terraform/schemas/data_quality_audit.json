@@ -1,0 +1,32 @@
+[
+  {
+    "name": "run_date",
+    "type": "DATE",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "check_name",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "status",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "failed_rows",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "details",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "created_ts",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  }
+]
